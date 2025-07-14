@@ -21,7 +21,8 @@ RUN pnpm run build
 # Remove dev dependencies to reduce image size
 RUN pnpm prune --prod
 
-# Expose no ports, use stdio
+# Expose port 8000 for the streamable HTTP endpoint
+EXPOSE 8000
 
-# Default command to run the MCP server
-CMD ["node", "build/index.js"]
+# Default command to run the MCP server via supergateway proxy
+CMD ["./node_modules/.bin/supergateway", "--stdio", "node build/index.js", "--outputTransport", "streamableHttp", "--port", "8000"]
